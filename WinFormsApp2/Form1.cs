@@ -45,25 +45,42 @@ namespace WinFormsApp2
             checkBox1.Enabled = false;
         }
 
-        private int ComputerTurn()
+        private void ComputerTurn()
         {
             Random random = new Random();
-            return random.Next(1, 9);
+            Button chosenButton = null;
+            do
+            {
+                string choice = "button" + random.Next(1, 9);
+                chosenButton = this.Controls.Find(choice, true).FirstOrDefault() as Button;
+            } while (chosenButton == null || !string.IsNullOrEmpty(chosenButton.Text));
+
+            if (chosenButton != null)
+            {
+                chosenButton.Text = "0";
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            switch (player) {
-                case 0:
-                    if(sender.Butt)
-                    player = 1;
-                    break;
-                case 1:
-                    sender.GetType().GetProperty("Text").SetValue(sender, "X");
-                    player = 0;
-                    break;
-                default:
-                    break;
+
+            if (sender is Button button)
+            {
+                switch (player)
+                {
+                    case 1:
+                        if (string.IsNullOrEmpty(button.Text))
+                        {
+                            button.Text = "X";
+                            player = 0;
+                        }
+                        ComputerTurn();
+                        player = 1;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
